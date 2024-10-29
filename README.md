@@ -16,7 +16,6 @@ A primeira é uma entrevista com o usuário a cerca dos suspeitos: Quantos são,
 
 Já na segunda parte, o usuário terá que pegar o(s) culpado(s) através de um labirinto. Quando conseguir, será mostrado o melhor caminho possível que poderia ter sido tomado.
 
-
 ## Screenshots
 Adicione 3 ou mais screenshots do projeto em funcionamento.
 
@@ -29,8 +28,4 @@ Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
 Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
 
 ## Outros 
-Quaisquer outras informações sobre seu projeto podem ser descritas abaixo.
-
-
-
-
+A explicação de como a teoria dos grafos ajuda nesse problema se encontra [AQUI!!!](Explicacao.md)
