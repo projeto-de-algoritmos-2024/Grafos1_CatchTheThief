@@ -1,3 +1,4 @@
+from dataclasses import replace
 import time
 import os
 
@@ -13,13 +14,21 @@ def diminui_velocidade_texto(texto, PouI, delay=0.001):
         print()
         
 # Função que limita valor de N
-def pede_N():
+def pede_Numero(num):
     while True:
         try:
+            if num == "N":
+                intervalo = "3 e 7"
+                min = 3
+                max = 7
+            else:
+                intervalo = "1 e 4"
+                min = 1
+                max = 4
             # \033[3m e \033[0m deixa em itálico
-            N = int(input("\033[3m(digite um valor entre 3 e 7):\033[0m "))
-            if 3 <= N <= 7:
-                return N
+            Numero = int(input(f"\033[3m(digite um valor entre {intervalo}):\033[0m "))
+            if min <= Numero <= max:
+                return Numero
             else:
                 print("\033[3m(número fora do intervalo, tente novamente)\033[0m")
         except ValueError:
@@ -46,18 +55,38 @@ def quem_acusa_quem(matriz, quem_acusa, acusado, dicionario):
         coluna = dicionario[acusado]
         matriz[linha][coluna] = 1
 
+# Função que soma o total de cada coluna
+def soma_coluna(matriz, coluna):
+    soma = 0
+    for linha in matriz:
+        soma += linha[coluna]
+    return soma
+
+# Função que gera dicionário com a soma da coluna
+def gera_dicionario_soma(N, matriz):
+    dicionario = {chr(65 + i): soma_coluna(matriz, i) for i in range(N)}
+    return dicionario
+
+# Função que retorna os culpados
+def gera_lista_culpados(M, dicionario):
+    culpados = []
+    for suspeito, soma  in dicionario.items():
+        if soma == M:
+            culpados.append(suspeito)
+    return culpados
+
 # Limpa terminal antes de rodar
 os.system("clear")
 
 # Contexto da história
 diminui_velocidade_texto("Johan Towns (JT): Shells! Shells! Estão pedindo nossa ajuda em um caso...\nParece que na noite passada, uma obra de arte muito valiosa do museu Hermitage, aqui em São Petersburgo, foi roubada.\nE o culpado ainda não foi encontrado, porém com ajuda das autoridades locais, alguns suspeitos foram detidos.\nAgora querem nossa ajuda, o estimado Detetive Shells Shock, e seu fiel escudeiro Sr. Johan Towns!\nApenas nós conseguiríamos decifrar esse misté-\n\nShells Shock (SS): Está atrasado, caro Sr. Towns, já falei com as autoridades, e esse caso é mais simples do que parece,\njá tenho uma boa ideia de quem é o culpado, apenas com o que foi dito.", "P")
 
+diminui_velocidade_texto("\nJT: Estou chocado com sua astúcia Detetive Shock. Então, para começar, quantos suspeitos são exatamente? ", "P")
+
 # N é o número de suspeitos, nossos vértices
-diminui_velocidade_texto("\nJT: Estou chocado com sua astúcia Detetive Shock. Então, para começar, quantos suspeitos são exatamente?: ", "P")
+N = pede_Numero("N")
 
-N = pede_N()
-
-diminui_velocidade_texto(f"SS: São exatamente {N} supeitos.", "P")
+diminui_velocidade_texto(f"\nSS: São exatamente {N} supeitos.", "P")
 
 # Gerando dicionário de suspeitos
 suspeitos = gera_dicionario_suspeitos(N)
@@ -90,6 +119,38 @@ for quem_acusa in suspeitos.keys():
             else:
                 complemento = "não está na lista de suspeitos!!!"
             diminui_velocidade_texto(f"\033[3m('{acusado} {complemento}')\033[0m", "P") 
+
+diminui_velocidade_texto("\nJT: Estou chocado com sua astúcia Detetive Shock, conseguiu lembrar exatamente o que foi dito por cada suspeito...\nE quantos estão dizendo a verdade?", "P")
+
+diminui_velocidade_texto("\nSS: Não consigo afirmar com total certeza, porém creio que sejam...", "P")
+
+# M é o número de suspeitos dizendo a verdade
+M = pede_Numero("M")
+
+# Gerando dicionário de somas
+dicionarioSoma = gera_dicionario_soma(N, matrizAcusacoes)
+
+# Gerando lista de culpados
+listaCulpados = gera_lista_culpados(M, dicionarioSoma)
+
+# Salvando o número de culpados
+nCulpados = len(listaCulpados)
+
+if nCulpados == 1:
+    vl = "é"
+    comS = ""
+else:
+    vl = "são"
+    comS = "s"
+
+diminui_velocidade_texto(f"\nJT: Porém é impossível descobrir quem {vl} o{comS} verdadeiro{comS} culpado{comS}, não é mesmo, Detetive, hahah-", "P")
+diminui_velocidade_texto(f"\nSS: Aí que você se engana, Sr. Towns...\nJá sei exatamente quem {vl} o{comS} culpado{comS}.", "P")
+diminui_velocidade_texto(f"\nJT: Estou chocado com sua astúcia Detetive Shock, e quem {vl} ele{comS}?", "P")
+
+if nCulpados == 0:
+    diminui_velocidade_texto("\nSS: Nenhum dos suspeitos é o culpado.", "P")
+else:    
+    diminui_velocidade_texto(f"\nSS: Caro Sr. Towns, o{comS} cullpado{comS} {vl}: {listaCulpados}", "P")
 
 
 for i in matrizAcusacoes:
