@@ -4,7 +4,7 @@ import os
 from pyamaze import maze, agent, textLabel, COLOR
 
 # Função que diminui a velocidade q o texto é escrito no terminal
-def diminui_velocidade_texto(texto, PouI, delay=0.001):
+def diminui_velocidade_texto(texto, PouI, delay=0.05):
     for char in texto:
         print(char, end='', flush=True)
         time.sleep(delay)
@@ -243,6 +243,10 @@ labirinto.CreateMaze(loopPercent=50)
 # Lista com as posições ocupadas, já com a posição inicial
 posicoesOcupadas = [(15, 15)]
 
+# Quando não há culpados na lista, marca o verdeiro culpado no objetivo
+if nCulpados == 0:
+    z = agent(labirinto, 1, 1, color=COLOR.red)
+
 # Adicionando culpados no mapa, sempre em posições
 for culpado in listaCulpados:
     while True:
@@ -250,7 +254,7 @@ for culpado in listaCulpados:
         x = random.randint(1,15)
         y = random.randint(1,15)
         # Conferindo se a posição já está ocupada por outro suspeito
-        if (x,y) not in posicoesOcupadas and (x,y:
+        if (x,y) not in posicoesOcupadas:
             posicoesOcupadas.append((x,y))
             a = agent(labirinto,x,y,color=COLOR.red)
             break
@@ -273,6 +277,6 @@ jogador = agent(labirinto, footprints=True, color=COLOR.green)
 labirinto.enableWASD(jogador)
 
 # Função delay antes da próxima ação    
-time.sleep(5)  # Pausa de 5 segundos
+time.sleep(2)  # Pausa de 5 segundos
 
 labirinto.run()

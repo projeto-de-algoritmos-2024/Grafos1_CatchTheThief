@@ -12,20 +12,31 @@
 ## Sobre 
 O "Catch the Thief" é um joguinho que explora a teoria dos grafos para resolver um crime. Basicamente o jogo é dividido em 2 partes:
 
-A primeira é uma entrevista com o usuário a cerca dos suspeitos: Quantos são, quem está acusando quem, e quantos estão dizendo a verdade. Apenas com essas 3 informações é possível dizer o(s) culpados(s) apenas utilizando a teoria de grafos.
+A primeira é uma entrevista com o usuário, sendo o incrível Detetive Shells Shock, a cerca dos suspeitos: Quantos são, quem está acusando quem, e quantos estão dizendo a verdade. Apenas com essas 3 informações é possível dizer o(s) culpados(s) apenas utilizando a teoria de grafos.
 
-Já na segunda parte, o usuário terá que pegar o(s) culpado(s) através de um labirinto. Quando conseguir, será mostrado o melhor caminho possível que poderia ter sido tomado.
+Já na segunda parte, o usuário controlará, o ajudante do Detetive, o Sr. Towns, a pegar os verdadeiros culpados.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+
+<img src="img/print1.png" width=2000/>
+<img src="img/print2.png" width=2000/>
+<img src="img/print3.png" width=300/>
+<img src="img/print4.png" width=300/>
 
 ## Instalação 
-**Linguagem**: Python<br>
+**Linguagem:** Python<br>
+**Versão:** 3 ou superior<br>
 
-Descreva os pré-requisitos para rodar o seu projeto e os comandos necessários.
+Ter no mínimo a versão 3 do Python.
+
+Instalar a biblioteca Pyamaze na máquina:
+
+<i>pip install pyamaze</i>
+
+Recomendamos abrir pelo VsCode para facilitar a visualização do código e rodar (clicando no play)
 
 ## Uso 
-Explique como usar seu projeto caso haja algum passo a passo após o comando de execução.
+Uma vez que executar o código, toda aplicação será via terminal, sendo necessário ler as instruções que forem aparecendo.
 
 ## Outros 
 A explicação de como a teoria dos grafos ajuda nesse problema se encontra [AQUI!!!](Explicacao.md)
