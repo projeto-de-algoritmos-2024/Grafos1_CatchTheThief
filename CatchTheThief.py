@@ -4,7 +4,7 @@ import os
 from pyamaze import maze, agent, textLabel, COLOR
 
 # Função que diminui a velocidade q o texto é escrito no terminal
-def diminui_velocidade_texto(texto, PouI, delay=0.05):
+def diminui_velocidade_texto(texto, PouI, delay=0.001):
     for char in texto:
         print(char, end='', flush=True)
         time.sleep(delay)
@@ -27,7 +27,7 @@ def pede_N():
         except ValueError:
             print("\033[3m(digite um número inteiro)\033[0m")
 
-# Função que limita valor de M (Número de suspeitros dizendo a verdade)
+# Função que limita valor de M (Número de suspeitos dizendo a verdade)
 def pede_M(N):
     while True:
         try:

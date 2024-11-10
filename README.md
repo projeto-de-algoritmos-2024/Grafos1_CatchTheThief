@@ -14,14 +14,14 @@ O "Catch the Thief" é um joguinho que explora a teoria dos grafos para resolver
 
 A primeira é uma entrevista com o usuário, sendo o incrível Detetive Shells Shock, a cerca dos suspeitos: Quantos são, quem está acusando quem, e quantos estão dizendo a verdade. Apenas com essas 3 informações é possível dizer o(s) culpados(s) apenas utilizando a teoria de grafos.
 
-Já na segunda parte, o usuário controlará, o ajudante do Detetive, o Sr. Towns, a pegar os verdadeiros culpados.
+Já na segunda parte, o usuário controlará, o ajudante do Detetive, o Sr. Towns, a pegar os verdadeiros culpados, em um labirinto feito em Pyamaze.
 
 ## Screenshots
 
 <img src="img/print1.png" width=2000/>
 <img src="img/print2.png" width=2000/>
-<img src="img/print3.png" width=300/>
-<img src="img/print4.png" width=300/>
+<img src="img/print3.png" width=2000/>
+<img src="img/print4.png" width=2000/>
 
 ## Instalação 
 **Linguagem:** Python<br>
@@ -37,6 +37,12 @@ Recomendamos abrir pelo VsCode para facilitar a visualização do código e roda
 
 ## Uso 
 Uma vez que executar o código, toda aplicação será via terminal, sendo necessário ler as instruções que forem aparecendo.
+
+## Link para o vídeo de explicação do trabalho
+<a href = "https://drive.google.com/file/d/1bpXAZu65bnVgZMid9Fyh4ounrfUqZCJ_/view?usp=sharing">Explicação Trabalho (Drive)</a>
+
+<a href = "https://youtu.be/WqJcgC5K3Dw">Explicação Trabalho (YouTube)</a>
+
 
 ## Outros 
 A explicação de como a teoria dos grafos ajuda nesse problema se encontra [AQUI!!!](Explicacao.md)
