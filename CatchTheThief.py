@@ -1,6 +1,7 @@
-from dataclasses import replace
+import random
 import time
 import os
+from pyamaze import maze, agent, textLabel, COLOR
 
 # Função que diminui a velocidade q o texto é escrito no terminal
 def diminui_velocidade_texto(texto, PouI, delay=0.001):
@@ -13,21 +14,26 @@ def diminui_velocidade_texto(texto, PouI, delay=0.001):
     else:
         print()
         
-# Função que limita valor de N
-def pede_Numero(num):
+# Função que limita valor de N (Número de suspeitos)
+def pede_N():
     while True:
         try:
-            if num == "N":
-                intervalo = "3 e 7"
-                min = 3
-                max = 7
-            else:
-                intervalo = "1 e 4"
-                min = 1
-                max = 4
             # \033[3m e \033[0m deixa em itálico
-            Numero = int(input(f"\033[3m(digite um valor entre {intervalo}):\033[0m "))
-            if min <= Numero <= max:
+            Numero = int(input(f"\033[3m(digite um valor entre 3 e 7):\033[0m "))
+            if 3 <= Numero <= 7:
+                return Numero
+            else:
+                print("\033[3m(número fora do intervalo, tente novamente)\033[0m")
+        except ValueError:
+            print("\033[3m(digite um número inteiro)\033[0m")
+
+# Função que limita valor de M (Número de suspeitros dizendo a verdade)
+def pede_M(N):
+    while True:
+        try:
+            # \033[3m e \033[0m deixa em itálico
+            Numero = int(input(f"\033[3m(digite um valor entre 1 e {N}):\033[0m "))
+            if 1 <= Numero <= N:
                 return Numero
             else:
                 print("\033[3m(número fora do intervalo, tente novamente)\033[0m")
@@ -70,7 +76,7 @@ def gera_dicionario_soma(N, matriz):
 # Função que retorna os culpados
 def gera_lista_culpados(M, dicionario):
     culpados = []
-    for suspeito, soma  in dicionario.items():
+    for suspeito, soma in dicionario.items():
         if soma == M:
             culpados.append(suspeito)
     return culpados
@@ -84,7 +90,7 @@ diminui_velocidade_texto("Johan Towns (JT): Shells! Shells! Estão pedindo nossa
 diminui_velocidade_texto("\nJT: Estou chocado com sua astúcia Detetive Shock. Então, para começar, quantos suspeitos são exatamente? ", "P")
 
 # N é o número de suspeitos, nossos vértices
-N = pede_Numero("N")
+N = pede_N()
 
 diminui_velocidade_texto(f"\nSS: São exatamente {N} supeitos.", "P")
 
@@ -125,7 +131,7 @@ diminui_velocidade_texto("\nJT: Estou chocado com sua astúcia Detetive Shock, c
 diminui_velocidade_texto("\nSS: Não consigo afirmar com total certeza, porém creio que sejam...", "P")
 
 # M é o número de suspeitos dizendo a verdade
-M = pede_Numero("M")
+M = pede_M(N)
 
 # Gerando dicionário de somas
 dicionarioSoma = gera_dicionario_soma(N, matrizAcusacoes)
@@ -136,22 +142,56 @@ listaCulpados = gera_lista_culpados(M, dicionarioSoma)
 # Salvando o número de culpados
 nCulpados = len(listaCulpados)
 
-if nCulpados == 1:
+# If para trocar entre singular e plural dependendo do número de culpados
+if nCulpados <= 1:
     vl = "é"
     comS = ""
 else:
     vl = "são"
     comS = "s"
 
+# Resto da história
 diminui_velocidade_texto(f"\nJT: Porém é impossível descobrir quem {vl} o{comS} verdadeiro{comS} culpado{comS}, não é mesmo, Detetive, hahah-", "P")
-diminui_velocidade_texto(f"\nSS: Aí que você se engana, Sr. Towns...\nJá sei exatamente quem {vl} o{comS} culpado{comS}.", "P")
-diminui_velocidade_texto(f"\nJT: Estou chocado com sua astúcia Detetive Shock, e quem {vl} ele{comS}?", "P")
+diminui_velocidade_texto(f"\nSS: Aí que você se engana, Sr. Towns...\nJá sei exatamente o desfecho dessa história.", "P")
+diminui_velocidade_texto(f"\nJT: Estou chocado com sua astúcia Detetive Shock, e qual seria?", "P")
 
 if nCulpados == 0:
     diminui_velocidade_texto("\nSS: Nenhum dos suspeitos é o culpado.", "P")
+    falaTelefone = "parece que o verdadeiro culpado está fugindo, de fato não era nenhum dos supeitos da nossa lista"
 else:    
-    diminui_velocidade_texto(f"\nSS: Caro Sr. Towns, o{comS} cullpado{comS} {vl}: {listaCulpados}", "P")
+    diminui_velocidade_texto(f"\nSS: Caro Sr. Towns, o{comS} culpado{comS} {vl}: {', '.join(listaCulpados)}", "P")
+    falaTelefone = "parece que os culpados, realmente quem você tinha dito ser, estão tentando fugir"
+    
+diminui_velocidade_texto(f"\nJT: Estou chocado com sua astúcia Detetive Shock, co-como chegou a esta conclu-\ntrrrim-trrrim-trrrim\nO telefone está tocando...", "P")
+diminui_velocidade_texto(f"\nSS: Não irá atendê-lo Sr. Towns...?", "P")
+diminui_velocidade_texto(f"\nJT: Ah, verdade, vou atender... Alô... uhum... entendi... estamos a caminho.\nShells, Shells, você não vai acreditar, eram as autoridades locais, {falaTelefone}, e pediram a nossa ajuda na captura. Vamos?", "P")
+diminui_velocidade_texto(f"\nSS: Depois do senhor, Sr. Towns...", "P")
+print("\033[3m(Ajude o Detevite Shocks e o Sr. Towns a capturar os culpados!)\033[0m")
+    
+# Criação do labirinto
+labirinto = maze()
+labirinto.CreateMaze(loopPercent=10, saveMaze=True)
 
+# Lista com as posições ocupadas
+posicoesOcupadas = set()
 
-for i in matrizAcusacoes:
-    print (i)
+# Adicionando culpados no mapa, sempre em posições
+for culpado in listaCulpados:
+    while True:
+        # Setando coordanadas aleatórias
+        x = random.randint(1,10)
+        y = random.randint(1,10)
+        # Conferindo se a posição já está ocupada por outro suspeito
+        if (x,y) not in posicoesOcupadas and (x,y) != (10,10):
+            posicoesOcupadas.add((x,y))
+            a = agent(labirinto,x,y,color=COLOR.red)
+            break
+
+# Criação do Jogador 
+jogador = agent(labirinto, footprints=True)
+labirinto.enableWASD(jogador)
+
+# Função delay antes da próxima ação    
+time.sleep(5)  # Pausa de 5 segundos
+
+labirinto.run()
