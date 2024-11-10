@@ -81,11 +81,76 @@ def gera_lista_culpados(M, dicionario):
             culpados.append(suspeito)
     return culpados
 
+# Função para calcular a célula vizinha
+def pega_prox_celula(celula, direcao):
+    x, y = celula
+    if direcao == 'E':
+        return (x, y + 1)
+    elif direcao == 'W':
+        return (x, y - 1)
+    elif direcao == 'N':
+        return (x - 1, y)
+    elif direcao == 'S':
+        return (x + 1, y)
+
+# Função de busca e largura - BFS
+# Retorna o menor caminho entre 2 pontos
+def bfs_caminho(labirinto, comeco, fim):
+    # Fila de vizinhos
+    fila = [comeco]
+    # Guarda de onde veio (pois será usado para fazer o caminho reverso) e já marca como visitado
+    origem = {comeco: None}
+
+    # Enquanto a fila tiver itens
+    while fila:
+        # Tirando o primeiro da fila
+        atual = fila.pop(0)
+        # Para quando chegar no destino
+        if atual == fim:
+            break
+        # Para cada direção
+        for direcao in 'ESNW':
+            # Confere se o valor no dicionário é igual 1 (tem caminho livre)
+            if labirinto.maze_map[atual][direcao] == 1:
+                # Pega a próxima célula
+                prox_celula = pega_prox_celula(atual, direcao)
+                # Caso ainda não tenha sido visitado
+                if prox_celula not in origem:
+                    # Inserindo o vizinho na fila
+                    fila.append(prox_celula)
+                    # Marcando a origem da proxima célula com a atual
+                    origem[prox_celula] = atual
+
+    # Construindo caminho ao contrário
+    caminho = []
+    # Enquanto houver um destino
+    while fim:
+        # Insere o 'fim', que é o atual no caminho
+        caminho.append(fim)
+        # Pega a origem e transforma no novo fim
+        fim = origem[fim]
+        # Retorna o caminho reverso
+    return caminho[::-1]
+
+# Criando caminho completo
+def caminho_completo(labirinto, lista):
+    # Cirando lista vazia que vai guardar nosso caminho
+    caminho_completo = []
+    # Para cada item da lista
+    for i in range(len(lista) - 1):
+        # Atribuindo o caminho entre o primeiro e o segundo item da lista
+        menor_caminho_entre_dois_pontos = bfs_caminho(labirinto, lista[i], lista[i + 1])
+        # Adiciona esse pedaço do caminho no caminho completo, retirando o último elemento, pois ele já será o primeiro elemento na próxima iteração
+        caminho_completo.extend(menor_caminho_entre_dois_pontos[:-1])
+    # Adicionando último item da lista
+    caminho_completo.append(lista[-1])
+    return caminho_completo
+
 # Limpa terminal antes de rodar
 os.system("clear")
 
 # Contexto da história
-diminui_velocidade_texto("Johan Towns (JT): Shells! Shells! Estão pedindo nossa ajuda em um caso...\nParece que na noite passada, uma obra de arte muito valiosa do museu Hermitage, aqui em São Petersburgo, foi roubada.\nE o culpado ainda não foi encontrado, porém com ajuda das autoridades locais, alguns suspeitos foram detidos.\nAgora querem nossa ajuda, o estimado Detetive Shells Shock, e seu fiel escudeiro Sr. Johan Towns!\nApenas nós conseguiríamos decifrar esse misté-\n\nShells Shock (SS): Está atrasado, caro Sr. Towns, já falei com as autoridades, e esse caso é mais simples do que parece,\njá tenho uma boa ideia de quem é o culpado, apenas com o que foi dito.", "P")
+diminui_velocidade_texto("Johan Towns (JT): Shells! Shells! Estão pedindo nossa ajuda em um caso...\nParece que na noite passada, uma obra de arte muito valiosa do museu Hermitage, aqui em São Petersburgo, foi roubada.\nE o culpado ainda não foi encontrado, porém com ajuda das autoridades locais, alguns suspeitos foram detidos.\nAgora querem nossa ajuda, o estimado Detetive Shells Shock, e seu fiel escudeiro Sr. Johan Towns!\nApenas nós conseguiríamos decifrar esse misté-\n\nShells Shock (SS): Está atrasado, caro Sr. Towns, já falei com as autoridades, e esse caso é mais simples do que parece,\njá tenho uma boa ideia do que aconteceu, apenas com o que foi dito.", "P")
 
 diminui_velocidade_texto("\nJT: Estou chocado com sua astúcia Detetive Shock. Então, para começar, quantos suspeitos são exatamente? ", "P")
 
@@ -158,37 +223,53 @@ diminui_velocidade_texto(f"\nJT: Estou chocado com sua astúcia Detetive Shock, 
 if nCulpados == 0:
     diminui_velocidade_texto("\nSS: Nenhum dos suspeitos é o culpado.", "P")
     falaTelefone = "parece que o verdadeiro culpado está fugindo, de fato não era nenhum dos supeitos da nossa lista"
+    seta = ""
 else:    
     diminui_velocidade_texto(f"\nSS: Caro Sr. Towns, o{comS} culpado{comS} {vl}: {', '.join(listaCulpados)}", "P")
     falaTelefone = "parece que os culpados, realmente quem você tinha dito ser, estão tentando fugir"
+    seta = " -> "
     
 diminui_velocidade_texto(f"\nJT: Estou chocado com sua astúcia Detetive Shock, co-como chegou a esta conclu-\ntrrrim-trrrim-trrrim\nO telefone está tocando...", "P")
 diminui_velocidade_texto(f"\nSS: Não irá atendê-lo Sr. Towns...?", "P")
 diminui_velocidade_texto(f"\nJT: Ah, verdade, vou atender... Alô... uhum... entendi... estamos a caminho.\nShells, Shells, você não vai acreditar, eram as autoridades locais, {falaTelefone}, e pediram a nossa ajuda na captura. Vamos?", "P")
 diminui_velocidade_texto(f"\nSS: Depois do senhor, Sr. Towns...", "P")
-print("\033[3m(Ajude o Detevite Shocks e o Sr. Towns a capturar os culpados!)\033[0m")
+diminui_velocidade_texto(f"\nN: Após a ligação, o Detetive Shells Shock e seu fiel escudeiro Sr. Johan Towns, saem em busca do{comS} verdadeiro{comS} culpado{comS}.\nObviamente, com tamanha astúcia, o Detetive vai pelo melhor caminho... Já o atrapalhado Johan Towns...", "P")
+print("\033[3m(Após ver o caminho do Detetive, ajude o pobre Sr. Towns a fazer o mesmo)\033[0m")
     
 # Criação do labirinto
-labirinto = maze()
-labirinto.CreateMaze(loopPercent=10, saveMaze=True)
+labirinto = maze(15, 15)
+labirinto.CreateMaze(loopPercent=50)
 
-# Lista com as posições ocupadas
-posicoesOcupadas = set()
+# Lista com as posições ocupadas, já com a posição inicial
+posicoesOcupadas = [(15, 15)]
 
 # Adicionando culpados no mapa, sempre em posições
 for culpado in listaCulpados:
     while True:
         # Setando coordanadas aleatórias
-        x = random.randint(1,10)
-        y = random.randint(1,10)
+        x = random.randint(1,15)
+        y = random.randint(1,15)
         # Conferindo se a posição já está ocupada por outro suspeito
-        if (x,y) not in posicoesOcupadas and (x,y) != (10,10):
-            posicoesOcupadas.add((x,y))
+        if (x,y) not in posicoesOcupadas and (x,y:
+            posicoesOcupadas.append((x,y))
             a = agent(labirinto,x,y,color=COLOR.red)
             break
 
-# Criação do Jogador 
-jogador = agent(labirinto, footprints=True)
+# Adicionando posição final
+posicoesOcupadas.append((1, 1))
+
+# Criando melhor caminho
+MelhorCaminho = caminho_completo(labirinto, posicoesOcupadas)
+
+# Label com a quantidade de passos do melhor caminho
+label = textLabel(labirinto,f"Quantidade de passos do melhor caminho, feito pelo Detetive nessa ordem: Começo -> {' -> '.join(listaCulpados)}{seta}Fim", len(MelhorCaminho) + 1)
+
+# Mostrando melhor caminho
+mostrandoMelhorCaminho = agent(labirinto, footprints=True, filled=True)
+labirinto.tracePath({mostrandoMelhorCaminho: MelhorCaminho}, delay = 200, kill=True)
+
+# Criando do Jogador 
+jogador = agent(labirinto, footprints=True, color=COLOR.green)
 labirinto.enableWASD(jogador)
 
 # Função delay antes da próxima ação    
